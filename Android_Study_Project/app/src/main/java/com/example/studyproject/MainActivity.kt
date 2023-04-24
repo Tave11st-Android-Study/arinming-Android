@@ -27,6 +27,22 @@ fun main () = runBlocking {
 
     main2()
     doDone()
+
+    // 명시적 작업
+
+    // launch 코루틴 빌더는 실행된 코루틴에 대한 핸들
+    // 작업이 완료될 때까지 명시적으로 기다리는 데 사용할 수 있는 job 개체를 반환
+    // 자식 코루틴이 완료될 때까지 기다린 후 완료 문자 print
+
+    val job = launch {  // 새 코루틴을 시작하고 작업에 대한 참조를 유지한다
+        delay( 1000L )
+        println("World~")
+    }
+    println("Hi!")
+    job.join()  // 자식 코루틴이 완료될 때까지 대기
+    println("완료")
+
+
 }
 
 // coroutineScope 빌더를 사용하여 자신의 범위를 선언할 수 있다

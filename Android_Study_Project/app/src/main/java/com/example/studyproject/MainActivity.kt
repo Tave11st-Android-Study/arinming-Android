@@ -25,21 +25,47 @@ fun main () = runBlocking {
     }
     println("Hello")    // 메인 코루틴은 이전 코루틴이 지연되는 동안 계속된다
 
+    main2()
     doDone()
+}
+
+// coroutineScope 빌더를 사용하여 자신의 범위를 선언할 수 있다
+// 코루틴 범위를 생성하고 시작된 모든 자식 함수가 완료될 때 까지 끝나지 않는다
+
+// runBlocking과 coroutineScope 빌더는 비슷해 보일 수 있다
+// runBlocking 메서드는 대기를 위해 현재 스레드를 차단 : 일반 함수
+// coroutineScope는 일시 중단 -> 다른 용도를 위해 기본 스레드를 해제 : 정지 함수
+
+
+
+fun main2 () = runBlocking {
+    doWorld()
+}
+
+suspend fun doWorld() = coroutineScope {
+    launch {
+        delay(100L)
+        println("World!")
+    }
+    println("Hello")
 }
 
 
 // coroutineScope 빌더 : 여러 작업을 동시 수행하기 위해 정지 함수 내에서 사용
 // 일시 중단 함수 내에서 두개 코루틴 동시 실행
 
+// 블록 내부의 launch{} 두 코드는 동시에 실행된다
+// 1초 후 인쇄 -> 2초 후 인쇄
+// coroutineScope는 둘 다 완료된 후에 완료되므로 그 후에만 문자열을 반환한다
+
 fun doDone() = runBlocking {
-    doWorld()
+    doWorld2()
     println("Done")
 }
 
 
 
-suspend fun doWorld() = coroutineScope {
+suspend fun doWorld2() = coroutineScope {
     launch {
         delay(2000L)
         println("World 2")
